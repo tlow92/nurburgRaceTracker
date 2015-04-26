@@ -81,14 +81,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   $urlRouterProvider.otherwise('/tab/dash');
 
 }).directive('mathCoords', function() {
-      var startx = 6.960766;
-      var starty = 50.357903;
-      var endx = 6.934339;
-      var endy = 50.369982;
+      var pEW = 6.941568;
+      var pNS = 50.333372;
 
+
+      var startx = 6.934339;
+      var starty = 50.357903;
+      var endx = 6.960766;
+      var endy = 50.369982;
+      var dx = endx-startx;
+      var dy = endy-starty;
+      var svgDx =508;
+      var svgDy =503;
+
+      var facX = svgDx/dx;
+      var facY = svgDy/dy;
+
+      console.log(pEW - startx);
+      console.log(starty - pNS);
+      dx = (pEW - startx) * facX;
+      dy = ((starty - pNS)* facY) - svgDy;
+
+
+      console.log(dx);
+      console.log(dy);
       return {
-        restrict: 'A',
-        x : endx - startx,
-        y : endy - starty
+
+        restrict: 'C',
+        template : '<rect x="'+dx+'" y="'+dy+'" width="5" height="5" style="stroke: #000; fill:#FFF;"/>'
       };
     });
