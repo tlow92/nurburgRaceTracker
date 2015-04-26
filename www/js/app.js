@@ -80,4 +80,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-});
+}).directive('mathCoords', function() {
+      var startx = 6.960766;
+      var starty = 50.357903;
+      var endx = 6.934339;
+      var endy = 50.369982;
+
+      return {
+        restrict: 'A',
+        x : endx - startx,
+        y : endy - starty
+      };
+    });
