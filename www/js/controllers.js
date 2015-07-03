@@ -25,21 +25,20 @@ angular.module('starter.controllers', [])
 })
 
 .controller('mapCoordinates', function($scope, $http) {
+    $scope.teamlist = [];
+    $scope.teamposition = [];
 
 // JSON to array!
 
     $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
     .success(function(response){
-      $scope.list = response;
-      console.log($scope.list);
-      alert('Es ist eine Liste!');
+      $scope.teamlist = response;
     });
-/*
-    $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json').success(function(){
 
-
+    $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
+      .success(function(response){
+        $scope.teamposition = response;
     });
-*/
 
 
       console.log($scope);
