@@ -97,14 +97,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       var facX = svgDx/dx;
       var facY = svgDy/dy;
 
-      console.log(pEW - startx);
-      console.log(starty - pNS);
+      //console.log(pEW - startx);
+      //console.log(starty - pNS);
       dx = (pEW - startx) * facX;
       dy = ((starty - pNS)* facY) - svgDy;
 
 
-      console.log(dx);
-      console.log(dy);
+      //console.log(dx);
+      //console.log(dy);
       return {
 
         restrict: 'C',
