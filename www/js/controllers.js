@@ -23,9 +23,23 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('map', function($scope) {
+.controller('map', function($scope, $http) {
 
-    
+// JSON to array!
+
+    $http.get('http://live.racing.apioverip.de/IPHNGR24_list.json').success(function(response){
+      $scope.list = response;
+      console.log($scope.list);
+      alert('Es ist eine Liste!');
+    });
+
+    $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json').success(function(){
+
+
+    });
+
+
+
 
 
       console.log($scope);
