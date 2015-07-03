@@ -80,34 +80,34 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-}).directive('mathCoords', function() {
-      var pEW = 6.941568;
-      var pNS = 50.333372;
+}).controller('mapCoordinates', ['$scope', function($scope) {
 
+    console.log($scope);
+    console.log($scope.pNS);
 
-      var startx = 6.934339;
-      var starty = 50.357903;
-      var endx = 6.960766;
-      var endy = 50.369982;
-      var dx = endx-startx;
-      var dy = endy-starty;
-      var svgDx =508;
-      var svgDy =503;
+    var startx = 6.934339;
+    var starty = 50.357903;
+    var endx = 6.960766;
+    var endy = 50.369982;
+    var dx = endx-startx;
+    var dy = endy-starty;
+    var svgDx =508;
+    var svgDy =503;
 
-      var facX = svgDx/dx;
-      var facY = svgDy/dy;
+    var facX = svgDx/dx;
+    var facY = svgDy/dy;
 
-      //console.log(pEW - startx);
-      //console.log(starty - pNS);
-      dx = (pEW - startx) * facX;
-      dy = ((starty - pNS)* facY) - svgDy;
-
-
-      //console.log(dx);
-      //console.log(dy);
+    $scope.dx = ($scope.pEW - startx) * facX;
+    $scope.dy = ((starty - $scope.pNS)* facY) - svgDy;
+  }])
+  .directive('mathCoords', function() {
+      console.log('asd');
       return {
-
         restrict: 'C',
-        template : '<rect x="'+dx+'" y="'+dy+'" width="5" height="5" style="stroke: #000; fill:#FFF;"/>'
+        template : '<rect x="{{dx}}" y="{{dy}}" width="5" height="5" style="stroke: #000; fill:#FFF;"/>',
+        scope: {
+          pEW : '=coordx',
+          pNS : '=coordy'
+        }
       };
     });
