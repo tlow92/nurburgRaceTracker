@@ -30,16 +30,17 @@ angular.module('starter.controllers', [])
 
 // JSON to array!
 
-    $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
+    $http.get('http://live.racing.apioverip.de/IPHNGR24_list.json')
     .success(function(response){
       $scope.teamlist = response;
+      console.log($scope.teamlist);
     });
 
     $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
       .success(function(response){
         $scope.teamposition = response;
+        console.log($scope.teamposition);
     });
-
 
       console.log($scope);
       console.log($scope.pNS);
