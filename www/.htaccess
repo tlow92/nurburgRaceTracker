@@ -1,0 +1,4 @@
+Header set Access-Control-Allow-Origin: http://live.racing.apioverip.de
+Header set Access-Control-Allow-Methods: GET
+Header set Access-Control-Allow-Origin: http://racing.apioverip.de
+Header set Access-Control-Allow-Methods: POST
