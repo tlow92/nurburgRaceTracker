@@ -25,8 +25,21 @@ angular.module('starter.controllers', [])
 
 .controller('map', function($scope) {
 
-}
+    
 
 
-
-);
+      console.log($scope);
+      console.log($scope.pNS);
+      var startx = 6.934339;
+      var starty = 50.357903;
+      var endx = 6.960766;
+      var endy = 50.369982;
+      var dx = endx-startx;
+      var dy = endy-starty;
+      var svgDx =508;
+      var svgDy =503;
+      var facX = svgDx/dx;
+      var facY = svgDy/dy;
+      $scope.dx = ($scope.pEW - startx) * facX;
+      $scope.dy = ((starty - $scope.pNS)* facY) - svgDy;
+});
