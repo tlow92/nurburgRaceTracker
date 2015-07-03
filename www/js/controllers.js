@@ -1,11 +1,12 @@
 angular.module('starter.controllers', [])
 
+  /*
 .controller('DashCtrl', function($scope,positions) {
       positions.get().then(function(data) {
         console.log(data)
       })
     })
-
+*/
 .controller('ChatsCtrl', function($scope, Chats) {
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
@@ -23,23 +24,22 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('map', function($scope, $http) {
+.controller('mapCoordinates', function($scope, $http) {
 
 // JSON to array!
 
-    $http.get('http://live.racing.apioverip.de/IPHNGR24_list.json').success(function(response){
+    $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
+    .success(function(response){
       $scope.list = response;
       console.log($scope.list);
       alert('Es ist eine Liste!');
     });
-
+/*
     $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json').success(function(){
 
 
     });
-
-
-
+*/
 
 
       console.log($scope);

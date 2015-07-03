@@ -1,5 +1,5 @@
-angular.module('starter.services', [])
-
+angular.module('starter.services', []);
+/*
 .factory('positions', function($http) {
       var url = '/api/request.php';
       return {
@@ -9,4 +9,6 @@ angular.module('starter.services', [])
           })
         }
       }
+
 });
+*/
