@@ -29,8 +29,9 @@ angular.module('starter.services', [])
     var facY = svgDy / dy;
 
     var svg = document.getElementById('svgObject');
-    // Initialisierung
 
+    var url = 'img/IPHNGR24_positions.json';
+    // Initialisierung
 
     function Car(args) {
       this.id = args.id;
@@ -50,14 +51,12 @@ angular.module('starter.services', [])
       this.unix_ts = args.unix_ts;
       this.matrix_id = args.matrix_id;
 
-      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      this.testNode.setAttribute('fill', '#FF0000');
-      this.testNode.setAttribute('width', '2');
-      this.testNode.setAttribute('height', '2');
-      this.testNode.setAttribute('stroke', '#FFF');
+      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      this.testNode.setAttribute('width', '5');
+      this.testNode.setAttribute('height', '5');
+      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'https://cdn2.iconfinder.com/data/icons/social-media-8/128/pointer.png');
       var self = this;
       svg.addEventListener('load', function () {
-        console.log("loooooooad");
         var x = svgStartx + ((this.we - startx) * facX);
         var y = svgStarty + ((starty - this.ns) * facY);
         self.setMarker();
@@ -73,9 +72,9 @@ angular.module('starter.services', [])
     Car.prototype.setMarker = function () {
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
-
-      this.testNode.setAttribute('x', x);
-      this.testNode.setAttribute('y', y);
+      // 1.5 und 3 wegen icon
+      this.testNode.setAttribute('x', x - 1.5);
+      this.testNode.setAttribute('y', y - 3);
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
@@ -98,7 +97,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get('img/IPHNGR24_positions.json').success(function (response) {
+      $http.get(url).success(function (response) {
         response.forEach(function (element, index, array) {
           var car = cars[element.id];
           car.update(element, lastUpdate);
@@ -115,7 +114,7 @@ angular.module('starter.services', [])
     };
     return {
       init: function () {
-        $http.get('img/IPHNGR24_positions.json').success(function (response) {
+        $http.get(url).success(function (response) {
           response.forEach(function (element, index, array) {
             var car = new Car(element);
             cars[element.id] = car;
