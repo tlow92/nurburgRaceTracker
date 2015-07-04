@@ -48,22 +48,37 @@ angular.module('starter.controllers', [])
       setMarker : function(){
         //Ursprung:  x = 29 y = 289
         //Oben rechts: x = 293 y = 15
-        this.we = 6.94734;
-        this.ns = 50.336328;
-        
-        var startx = 6.934339;
-        var starty = 50.357903;
-        var endx = 6.960766;
-        var endy = 50.369982;
+        this.we = 6.925903;
+        this.ns = 50.346256;
+
+        // start oben links
+        var startx = 6.920078;
+        var starty = 50.38050;
+        // end unten rechts
+        var endx = 7.005519;
+        var endy = 50.323943;
+        // svg oben links
+        var svgStartx = 29;
+        var svgStarty = 15;
+        // svg rechts unten
+        var svgEndx = 293;
+        var svgEndy = 289;
+
         var dx = endx - startx;
-        var dy = endy - starty;
-        var svgDx = 289-15;
-        var svgDy = 293-29;
+        var dy = starty - endy;
+
+        var svgDx = svgEndx - svgStartx;
+        var svgDy = svgEndy - svgStarty;
+
         var facX = svgDx / dx;
         var facY = svgDy / dy;
-        var x = (this.ns - startx) * facX;
-        var y = ((starty - this.we) * facY) - svgDy;
 
+        var x = svgStartx + ((this.we - startx) * facX);
+        var y = svgStarty + ((starty - this.ns) * facY);
+
+
+        console.log(x);
+        console.log(y);
 
 
         // Initialisierung
@@ -87,7 +102,7 @@ angular.module('starter.controllers', [])
 car.setMarker();
 
 
-
+/*
     $scope.teamlist = [];
     $scope.teamposition = [];
 
@@ -99,5 +114,5 @@ car.setMarker();
     $http.get('http://live.racing.apioverip.de/IPHNGR24_positions.json')
       .success(function(response){
         $scope.teamposition = response;
-      });
+      });*/
 });
