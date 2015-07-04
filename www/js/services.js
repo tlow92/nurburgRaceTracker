@@ -57,6 +57,17 @@ angular.module('starter.services', [])
       }
     }
     Car.prototype.initMarker = function () {
+      this.tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      this.tooltip.setAttribute('width', 30);
+      this.tooltip.setAttribute('height', 10);
+      this.tooltip.setAttribute('rx','2');
+      this.tooltip.setAttribute('ry','2');
+      this.tooltip.setAttribute('opacity','0.4');
+      this.text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      this.text.setAttribute('width', 30);
+      this.text.setAttribute('height', 10);
+      this.text.textContent = 'Das ist ein Test Tooltip!';
+
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '8');
       this.testNode.setAttribute('height', '8');
@@ -64,10 +75,10 @@ angular.module('starter.services', [])
       var self = this;
 
       svg.addEventListener('load', function () {
-        var x = svgStartx + ((this.we - startx) * facX);
-        var y = svgStarty + ((starty - this.ns) * facY);
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
+        svg.contentDocument.getElementById('carsOnMap').appendChild(self.tooltip);
+        svg.contentDocument.getElementById('carsOnMap').appendChild(self.text);
       });
     };
     Car.prototype.update = function (element, lastUpdate) {
@@ -85,6 +96,10 @@ angular.module('starter.services', [])
       // 1.5 und 3 wegen icon
       this.testNode.setAttribute('x', x - 3.5);
       this.testNode.setAttribute('y', y - 5.2);
+      this.tooltip.setAttribute('x', x - 14);
+      this.tooltip.setAttribute('y', y + 3);
+      this.text.setAttribute('x', x - 14);
+      this.text.setAttribute('y', y + 3);
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
