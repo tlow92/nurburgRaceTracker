@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-  .factory('positions', function ($http,$interval) {
+  .factory('positions', function ($http,$interval, $q) {
     var cars = [];
 
     //Ursprung:  x = 29 y = 289
@@ -52,19 +52,28 @@ angular.module('starter.services', [])
       this.unix_ts = args.unix_ts;
       this.matrix_id = args.matrix_id;
 
+      if(svg != undefined) {
+        this.initMarker();
+      }
+    }
+    Car.prototype.initMarker = function () {
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      this.testNode.setAttribute('width', '5');
-      this.testNode.setAttribute('height', '5');
+      this.testNode.setAttribute('width', '8');
+      this.testNode.setAttribute('height', '8');
       this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
       var self = this;
+
       svg.addEventListener('load', function () {
         var x = svgStartx + ((this.we - startx) * facX);
         var y = svgStarty + ((starty - this.ns) * facY);
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
       });
-    }
+    };
     Car.prototype.update = function (element, lastUpdate) {
+      if(this.testNode == undefined) {
+        this.initMarker();
+      }
       this.we = element.WE;
       this.ns = element.NS;
       this.speed = element.speed;
@@ -74,8 +83,8 @@ angular.module('starter.services', [])
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
       // 1.5 und 3 wegen icon
-      this.testNode.setAttribute('x', x - 1.5);
-      this.testNode.setAttribute('y', y - 3);
+      this.testNode.setAttribute('x', x - 3.5);
+      this.testNode.setAttribute('y', y - 5.2);
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
@@ -100,7 +109,12 @@ angular.module('starter.services', [])
       lastUpdate = Date.now();
       $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
-          var car = cars[element.id];
+          if(cars[element.id] == undefined) {
+            var car = new Car(element);
+            cars[element.id] = car;
+          } else {
+            var car = cars[element.id];
+          }
           car.update(element, lastUpdate);
         });
         render();
@@ -115,43 +129,61 @@ angular.module('starter.services', [])
     };
     return {
       init: function () {
-        $http.get(urlmock).success(function (response) {
-          response.forEach(function (element, index, array) {
-            var car = new Car(element);
-            cars[element.id] = car;
-          });
-        })
+        return $q(function(resolve, reject) {
+          $http.get(urlmock).success(function (response) {
+            response.forEach(function (element, index, array) {
+              var car = new Car(element);
+              cars[element.id] = car;
+            });
+            resolve();
+          }).error(reject);
+        });
       },
       startLoop: start,
       cancelLoop: function() {
         if( loop != null) {
           $interval.cancel(loop);
         }
+      },
+      carArray : cars,
+      setSVG : function() {
+        svg = document.getElementById('svgObject');
       }
     }
   })
 
-  .factory('teams', function ($http) {
+  .factory('teams', function ($http, positions) {
     var teams = [];
-
-
-
-
-
     var url = 'http://live.racing.apioverip.de/IPHNGR24_list.json';
-    var urlmock = '../img/IPHNGR24_list.json';
+    var urlmock = 'img/IPHNGR24_list.json';
 
-    $http.get(urlmock).success(function (respone) {
-
-
-
+    positions.init().then(function() {
+      $http.get(urlmock).success(function (response) {
+        response.forEach(function(element, index, array){
+          if(positions.carArray[element.id] != undefined) {
+            positions.carArray[element.id] = element;
+          }
+        });
+      });
     });
 
-    return {
-      init: function () {
+   return {
+      getClassInformation: function (clazz, color) {
+        positions.carArray.forEach(function(element, index, array){
+          var result = [];
+          if(element.clazz == clazz) {
+            result.push({
+              element : element,
+              color : color
+            });
+          }
+          console.log(result);
 
-      }
+          return result;
+        })
+      },
+
     }
 
 
-  });
+  })

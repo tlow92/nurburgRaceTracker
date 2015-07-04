@@ -66,6 +66,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         //controller: 'InfoCtrl'
       }
     }
+  })
+
+  .state('tab.sp7', {
+    url: '/sp7',
+    views: {
+      'tab-info': {
+        templateUrl: 'templates/class-sp7.html'
+        //controller: 'InfoCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
