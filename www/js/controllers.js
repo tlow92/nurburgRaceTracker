@@ -109,6 +109,7 @@ angular.module('starter.controllers', [])
         image.setAttribute('height', '10');
         image.setAttribute('x', x);
         image.setAttribute('y', y);
+        svg.contentDocument.getElementById('carsOnMap').appendChild(image);
         svg.contentDocument.getElementById('carsOnMap').appendChild(testNode);
       });
 
