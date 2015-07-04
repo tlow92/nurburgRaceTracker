@@ -58,27 +58,37 @@ angular.module('starter.services', [])
     }
     Car.prototype.initMarker = function () {
       this.tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      this.tooltip.setAttribute('width', 30);
-      this.tooltip.setAttribute('height', 10);
+      this.tooltip.setAttribute('class', this.id);
+      this.tooltip.setAttribute('width', 36);
+      this.tooltip.setAttribute('height', 5);
       this.tooltip.setAttribute('rx','2');
       this.tooltip.setAttribute('ry','2');
       this.tooltip.setAttribute('opacity','0.4');
+      this.tooltip.setAttribute('display', 'none');
       this.text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      this.text.setAttribute('class', this.id);
       this.text.setAttribute('width', 30);
       this.text.setAttribute('height', 10);
-      this.text.textContent = 'Das ist ein Test Tooltip!';
-
+      this.text.setAttribute('font-size', 2);
+      this.text.setAttribute('fill', '#FFF');
+      this.text.setAttribute('font-family', 'Tahoma');
+      this.text.setAttribute('letter-spacing', '0.4');
+      this.text.textContent = this.id;
+      this.text.setAttribute('display', 'none');
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '8');
       this.testNode.setAttribute('height', '8');
       this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+      this.testNode.setAttribute('id', this.id);
+      this.testNode.setAttribute('onclick', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'block\');ele[1].setAttribute(\'display\', \'block\');this.setAttributeNS(\'http://www.w3.org/1999/xlink\', \'href\', \'../img/pointer_blau.png\')');
+      this.testNode.setAttribute('onmouseleave', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'none\');ele[1].setAttribute(\'display\', \'none\');this.setAttributeNS(\'http://www.w3.org/1999/xlink\', \'href\', \'../img/pointer.png\')');
       var self = this;
 
       svg.addEventListener('load', function () {
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
-        svg.contentDocument.getElementById('carsOnMap').appendChild(self.tooltip);
-        svg.contentDocument.getElementById('carsOnMap').appendChild(self.text);
+        svg.contentDocument.getElementById('tooltipsOnMap').appendChild(self.tooltip);
+        svg.contentDocument.getElementById('tooltipsOnMap').appendChild(self.text);
       });
     };
     Car.prototype.update = function (element, lastUpdate) {
@@ -96,10 +106,10 @@ angular.module('starter.services', [])
       // 1.5 und 3 wegen icon
       this.testNode.setAttribute('x', x - 3.5);
       this.testNode.setAttribute('y', y - 5.2);
-      this.tooltip.setAttribute('x', x - 14);
+      this.tooltip.setAttribute('x', x - 17);
       this.tooltip.setAttribute('y', y + 3);
       this.text.setAttribute('x', x - 14);
-      this.text.setAttribute('y', y + 3);
+      this.text.setAttribute('y', y + 6);
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
