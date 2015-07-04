@@ -98,7 +98,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(url).success(function (response) {
+      $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
           var car = cars[element.id];
           car.update(element, lastUpdate);
@@ -110,12 +110,12 @@ angular.module('starter.services', [])
       if(loop == null){
         loop = $interval(function(){
           update();
-        },2000)
+        },1500)
       }
     };
     return {
       init: function () {
-        $http.get(url).success(function (response) {
+        $http.get(urlmock).success(function (response) {
           response.forEach(function (element, index, array) {
             var car = new Car(element);
             cars[element.id] = car;
@@ -129,5 +129,29 @@ angular.module('starter.services', [])
         }
       }
     }
-  }
-);
+  })
+
+  .factory('teams', function ($http) {
+    var teams = [];
+
+
+
+
+
+    var url = 'http://live.racing.apioverip.de/IPHNGR24_list.json';
+    var urlmock = '../img/IPHNGR24_list.json';
+
+    $http.get(urlmock).success(function (respone) {
+
+
+
+    });
+
+    return {
+      init: function () {
+
+      }
+    }
+
+
+  });
