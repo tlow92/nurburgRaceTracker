@@ -30,7 +30,8 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var url = 'img/IPHNGR24_positions.json';
+    var urlmock = 'img/IPHNGR24_positions.json';
+    var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
     // Initialisierung
 
     function Car(args) {
@@ -54,7 +55,7 @@ angular.module('starter.services', [])
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '5');
       this.testNode.setAttribute('height', '5');
-      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'https://cdn2.iconfinder.com/data/icons/social-media-8/128/pointer.png');
+      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
       var self = this;
       svg.addEventListener('load', function () {
         var x = svgStartx + ((this.we - startx) * facX);
