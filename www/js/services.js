@@ -32,6 +32,13 @@ angular.module('starter.services', [])
 
     var url = 'img/IPHNGR24_positions.json';
     var strecke = '';
+    var worker = new Worker("js/closestPoint.js");
+
+    worker.postMessage({
+      type:"test",
+      svg:JSON.stringify(svg),
+      type:svg.constructor.name
+    });
     // Initialisierung
 
     function Car(args) {
@@ -63,6 +70,7 @@ angular.module('starter.services', [])
         var y = svgStarty + ((starty - this.ns) * facY);
         if(strecke == '') {
           strecke = d3.select(svg.contentDocument).select("#Kath_3_").node();
+          console.log(strecke.constructor);
         }
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
@@ -78,9 +86,9 @@ angular.module('starter.services', [])
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
       // 1.5 und 3 wegen icon
-      var approxPos = closestPoint(strecke, [x, y]);
-      this.testNode.setAttribute('x', approxPos[0] - 3);
-      this.testNode.setAttribute('y', approxPos[1] - 4);
+      //var approxPos = closestPoint(strecke, [x, y]);
+      //this.testNode.setAttribute('x', approxPos[0] - 3);
+      //this.testNode.setAttribute('y', approxPos[1] - 4);
 
       //this.testNode.setAttribute('x', x - 1.5);
       //this.testNode.setAttribute('y', y - 3);
@@ -90,47 +98,7 @@ angular.module('starter.services', [])
         this.testNode.parentNode.removeChild(this.testNode);
       }
     };
-    function closestPoint(pathNode, point) {
-      var pathLength = pathNode.getTotalLength(),
-        precision = pathLength / pathNode.pathSegList.numberOfItems * 4,
-        best,
-        bestLength,
-        bestDistance = Infinity;
-      // linear scan for coarse approximation
-      for (var scan, scanLength = 0, scanDistance; scanLength <= pathLength; scanLength += precision) {
-        if ((scanDistance = distance2(scan = pathNode.getPointAtLength(scanLength))) < bestDistance) {
-          best = scan, bestLength = scanLength, bestDistance = scanDistance;
-        }
-      }
 
-      // binary search for precise estimate
-      precision *= .5;
-      while (precision > 1.2) {
-        var before,
-          after,
-          beforeLength,
-          afterLength,
-          beforeDistance,
-          afterDistance;
-        if ((beforeLength = bestLength - precision) >= 0 && (beforeDistance = distance2(before = pathNode.getPointAtLength(beforeLength))) < bestDistance) {
-          best = before, bestLength = beforeLength, bestDistance = beforeDistance;
-        } else if ((afterLength = bestLength + precision) <= pathLength && (afterDistance = distance2(after = pathNode.getPointAtLength(afterLength))) < bestDistance) {
-          best = after, bestLength = afterLength, bestDistance = afterDistance;
-        } else {
-          precision *= .5;
-        }
-      }
-
-      best = [best.x, best.y];
-      best.distance = Math.sqrt(bestDistance);
-      return best;
-
-      function distance2(p) {
-        var dx = p.x - point[0],
-          dy = p.y - point[1];
-        return dx * dx + dy * dy;
-      }
-    };
     var render = function () {
       cars.forEach(function(car,index,array) {
         // Wenn Auto 5 Sekunden nichtmehr in Liste ist, wird es von der karte entfernt
@@ -157,6 +125,7 @@ angular.module('starter.services', [])
     var start = function() {
       if(loop == null){
         loop = $interval(function(){
+          worker.postMessage({asd:"asd"});
           update();
         },3000)
       }
