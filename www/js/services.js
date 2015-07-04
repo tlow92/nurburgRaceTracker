@@ -168,22 +168,14 @@ angular.module('starter.services', [])
     });
 
    return {
-      getClassInformation: function (clazz, color) {
+      getClassInformation: function (clazz) {
         positions.carArray.forEach(function(element, index, array){
           var result = [];
           if(element.clazz == clazz) {
-            result.push({
-              element : element,
-              color : color
-            });
+            result.push(element);
           }
-          console.log(result);
-
           return result;
         })
-      },
-
+      }
     }
-
-
-  })
+  });

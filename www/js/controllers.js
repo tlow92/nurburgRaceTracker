@@ -1,48 +1,67 @@
 angular.module('starter.controllers', [])
 
-  /*
-   .controller('DashCtrl', function($scope,positions) {
-   positions.get().then(function(data) {
-   console.log(data)
-   })
-   })
-   */
 
-  .controller('TeamCtrl', function ($scope, teams, positions) {
 
-    var sp7 = teams.getClassInformation('SP7','#00eb00');
+  .controller('TeamCtrl', function ($scope, teams, positions, $ionicActionSheet) {
 
-    $scope.getSP7 = function () {
-      return sp7;
-    }
+    
 
-      .controller(function($scope, $ionicActionSheet, $timeout) {
 
-        // Triggered on a button click, or some other target
-        $scope.show = function() {
 
-          // Show the action sheet
-          var hideSheet = $ionicActionSheet.show({
-            buttons: [
-              { text: '<b>Share</b> This' },
-              { text: 'Move' }
-            ],
-            destructiveText: 'Delete',
-            titleText: 'Modify your album',
-            cancelText: 'Cancel',
-            cancel: function() {
-              // add cancel code..
-            },
-            buttonClicked: function(index) {
+
+
+
+
+
+
+
+
+
+    $scope.$on('$ionicView.enter', function (e) {
+      $scope.showClass();
+    });
+
+    $scope.showClass = function () {
+      // Show the action sheet
+
+      $scope.expression = '';
+
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          {text: 'SP 7'},
+          {text: 'CUP5 (M235i)'}
+        ],
+        //destructiveText: 'end',
+        titleText: 'Wähle eine Klasse',
+        cancelText: 'Ende',
+        cancel: function () {
+          hideSheet();
+        },
+        buttonClicked: function (index) {
+          switch (index) {
+            case 0:
+              $scope.expression = 'SP7';
               return true;
-            }
-          });
-        };
+              break;
+            case 1:
+              $scope.expression = 'M 235i CUP';
+              return true;
+              break;
+            case 2:
+              $scope.expression = '00:15:00';
+              return true;
+              break;
+            case 3:
+              $scope.expression = '00:00:00';
+              return true;
+            default:
+              $scope.expression = '02:00:00';
+              return true;
+              break;
+          }
+        }
       });
-
-
-
-
+    }
   })
 
   .controller('mapCoordinates', function ($scope, $http, positions) {
