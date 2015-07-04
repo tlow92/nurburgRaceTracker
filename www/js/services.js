@@ -30,7 +30,8 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var url = 'img/IPHNGR24_positions.json';
+    var urlmock = 'img/IPHNGR24_positions.json';
+    var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
     // Initialisierung
 
     function Car(args) {
@@ -54,7 +55,7 @@ angular.module('starter.services', [])
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '5');
       this.testNode.setAttribute('height', '5');
-      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'https://cdn2.iconfinder.com/data/icons/social-media-8/128/pointer.png');
+      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
       var self = this;
       svg.addEventListener('load', function () {
         var x = svgStartx + ((this.we - startx) * facX);
@@ -97,7 +98,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(url).success(function (response) {
+      $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
           var car = cars[element.id];
           car.update(element, lastUpdate);
@@ -109,12 +110,12 @@ angular.module('starter.services', [])
       if(loop == null){
         loop = $interval(function(){
           update();
-        },2000)
+        },1500)
       }
     };
     return {
       init: function () {
-        $http.get(url).success(function (response) {
+        $http.get(urlmock).success(function (response) {
           response.forEach(function (element, index, array) {
             var car = new Car(element);
             cars[element.id] = car;
@@ -128,5 +129,29 @@ angular.module('starter.services', [])
         }
       }
     }
-  }
-);
+  })
+
+  .factory('teams', function ($http) {
+    var teams = [];
+
+
+
+
+
+    var url = 'http://live.racing.apioverip.de/IPHNGR24_list.json';
+    var urlmock = '../img/IPHNGR24_list.json';
+
+    $http.get(urlmock).success(function (respone) {
+
+
+
+    });
+
+    return {
+      init: function () {
+
+      }
+    }
+
+
+  });
