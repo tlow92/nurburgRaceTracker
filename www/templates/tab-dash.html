@@ -1,7 +1,19 @@
 <ion-view view-title="Karte">
-  <ion-content class="padding" ng-controller="mapCoordinates">
+  <ion-content class="" ng-controller="mapCoordinates">
+      <ion-scroll id='map' zooming='true' direction='xy'  style='width: 100vw; height: 100vh; background: #393939; margin-top: -43px;' class='has-header' min-zoom="1">
+          <div style='position: absolute; top: 0; left: 0; width: 100vw;height: 100vh; '></div>
+          <object id='mapObject' type="image/svg+xml" data="img/24h_Nuerburgring_Nordschleife_Vector.svg" style="margin-top: 25%;">
+              <param name="src" value="img/24h_Nuerburgring_Nordschleife_Vector.svg">
+          </object>
+      </ion-scroll>
 
-      <object data="img/24h_Nuerburgring_Nordschleife_Vector.svg" width="" height="" type="image/svg+xml" id="svgObject"></object>
+
+        <!-- oben rechts -->
+        <!--<rect x="112" y="35" width="5" height="5" style="stroke: #000; fill:#FFF;"/>-->
+<!--
+      <object data="img/24h_Nuerburgring_Nordschleife_Vector.svg" width="500px" height="500px"type="image/svg+xml" id="svgObject"></object>
+
+ -->
 
 
 
