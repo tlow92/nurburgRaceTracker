@@ -1,14 +1,133 @@
-angular.module('starter.services', []);
-/*
-.factory('positions', function($http) {
-      var url = '/api/request.php';
-      return {
-        get: function() {
-          return $http.get(url, {action: 'getpositions'}).then(function(data) {
-            return data;
-          })
+angular.module('starter.services', [])
+
+  .factory('positions', function ($http,$interval) {
+    var cars = [];
+
+    //Ursprung:  x = 29 y = 289
+    //Oben rechts: x = 293 y = 15
+
+    // start oben links
+    var startx = 6.920078;
+    var starty = 50.38050;
+    // end unten rechts
+    var endx = 7.005519;
+    var endy = 50.323943;
+    // svg oben links
+    var svgStartx = 29;
+    var svgStarty = 15;
+    // svg rechts unten
+    var svgEndx = 293;
+    var svgEndy = 289;
+
+    var dx = endx - startx;
+    var dy = starty - endy;
+
+    var svgDx = svgEndx - svgStartx;
+    var svgDy = svgEndy - svgStarty;
+
+    var facX = svgDx / dx;
+    var facY = svgDy / dy;
+
+    var svg = document.getElementById('svgObject');
+    // Initialisierung
+
+
+    function Car(args) {
+      this.id = args.id;
+      this.name = args.name;
+      this.team = args.team;
+      this.country = args.country;
+      this.nr = args.nr;
+      this.deviceid = args.deviceid;
+      this.color = args.color;
+      this.clazz = args.clazz;
+      this.we = args.WE;
+      this.ns = args.NS;
+      this.dir = args.dir;
+      this.speed = args.speed;
+      this.ts = args.ts;
+      this.ownTs = Date.now();
+      this.unix_ts = args.unix_ts;
+      this.matrix_id = args.matrix_id;
+
+      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      this.testNode.setAttribute('fill', '#FF0000');
+      this.testNode.setAttribute('width', '2');
+      this.testNode.setAttribute('height', '2');
+      this.testNode.setAttribute('stroke', '#FFF');
+      var self = this;
+      svg.addEventListener('load', function () {
+        console.log("loooooooad");
+        var x = svgStartx + ((this.we - startx) * facX);
+        var y = svgStarty + ((starty - this.ns) * facY);
+        self.setMarker();
+        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
+      });
+    }
+    Car.prototype.update = function (element, lastUpdate) {
+      this.we = element.WE;
+      this.ns = element.NS;
+      this.speed = element.speed;
+      this.ownTs = lastUpdate;
+    };
+    Car.prototype.setMarker = function () {
+      var x = svgStartx + ((this.we - startx) * facX);
+      var y = svgStarty + ((starty - this.ns) * facY);
+
+      this.testNode.setAttribute('x', x);
+      this.testNode.setAttribute('y', y);
+    };
+    Car.prototype.removeMarker = function() {
+      console.log("remove Marker");
+      if(this.testNode != null && this.testNode.parentNode != null){
+        this.testNode.parentNode.removeChild(this.testNode);
+      }
+    };
+    var render = function () {
+      cars.forEach(function(car,index,array) {
+        // Wenn Auto 5 Sekunden nichtmehr in Liste ist, wird es von der karte entfernt
+        var isVeraltet = car.ownTs < (lastUpdate - 5000);
+        if(!isVeraltet) {
+          car.setMarker();
+        } else {
+          car.removeMarker();
+        }
+      });
+    };
+    var loop = null;
+    var lastUpdate;
+    var update = function () {
+      lastUpdate = Date.now();
+      $http.get('img/IPHNGR24_positions.json').success(function (response) {
+        response.forEach(function (element, index, array) {
+          var car = cars[element.id];
+          car.update(element, lastUpdate);
+        });
+        render();
+      });
+    };
+    var start = function() {
+      if(loop == null){
+        loop = $interval(function(){
+          update();
+        },2000)
+      }
+    };
+    return {
+      init: function () {
+        $http.get('img/IPHNGR24_positions.json').success(function (response) {
+          response.forEach(function (element, index, array) {
+            var car = new Car(element);
+            cars[element.id] = car;
+          });
+        })
+      },
+      startLoop: start,
+      cancelLoop: function() {
+        if( loop != null) {
+          $interval.cancel(loop);
         }
       }
-
-});
-*/
+    }
+  }
+);
