@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
   .controller('TeamCtrl', function ($scope, teams, positions, $ionicActionSheet) {
   $scope.cars = positions.carArray;
-    console.log($scope.cars);
+    $scope.teams = positions.teams;
     $scope.$on('$ionicView.enter', function (e) {
       //$scope.showClass();
     });

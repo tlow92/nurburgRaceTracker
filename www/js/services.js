@@ -2,11 +2,13 @@ angular.module('starter.services', [])
 
   .factory('positions', function ($http,$interval, $q) {
     var cars = [];
+    var teams = [];
     /**
      * car.id -> position in cars[]
      * @type {Array}
      */
-    var mapping = [];
+    var carMapping = [];
+    var teamMapping = [];
 
     //Ursprung:  x = 29 y = 289
     //Oben rechts: x = 293 y = 15
@@ -66,6 +68,19 @@ angular.module('starter.services', [])
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '8');
       this.testNode.setAttribute('height', '8');
+      switch(this.clazz){
+        case '':
+          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+          break;
+        case 'CUP5':
+          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+          break;
+        default:
+          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+          break;
+      }
+
+      }
       this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
       var self = this;
 
@@ -135,10 +150,19 @@ angular.module('starter.services', [])
     };
     var addCar = function(car){
       var position = cars.push(car);
-      mapping[car.id] = position;
+      if(car.team != undefined)addToTeam(car);
+      carMapping[car.id] = position-1;
+    };
+    var addToTeam = function(car){
+      if(teamMapping[car.team] === undefined){
+        var team = [];
+        var pos = teams.push({push:team.push,name:car.team,forEach:team.forEach});
+        teamMapping[car.team] = pos;
+      }
+      teams[teamMapping[car.team]-1].push(car);
     };
     var getCar = function(id) {
-      return cars[mapping[id]];
+      return cars[carMapping[id]];
     };
     return {
       init: function () {
@@ -162,8 +186,10 @@ angular.module('starter.services', [])
         }
       },
       carArray : cars,
+      teams: teams,
       getCar : getCar,
       addCar : addCar,
+      addToTeam: addToTeam,
       setSVG : function() {
         svg = document.getElementById('svgObject');
       }
@@ -182,7 +208,11 @@ angular.module('starter.services', [])
           response.forEach(function(element, index, array){
             var current = positions.getCar(element.deviceid);
             if(current != undefined) {
-              current.team = element.team;
+              if(element.team != undefined){
+                current.team = element.team;
+                positions.addToTeam(current);
+                console.log(positions);
+              }
               current.country = element.country;
               current.color = element.color;
               current.clazz = element.class;
