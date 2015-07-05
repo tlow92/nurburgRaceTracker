@@ -37,7 +37,7 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var url = 'img/IPHNGR24_position_current.json';
+    var urlmock = 'img/IPHNGR24_position_current.json';
     var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
 
     var prom;
@@ -67,21 +67,12 @@ angular.module('starter.services', [])
       }
     }
     Car.prototype.initMarker = function () {
-      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      this.testNode.setAttribute('width', '8');
-      this.testNode.setAttribute('height', '8');
 
-      switch(this.clazz){
-        case 'SP7':
-          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
-          break;
-        case 'CUP5':
-          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
-          break;
-        default:
-          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
-          break;
-      }
+      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      this.testNode.setAttribute('width', '5');
+      this.testNode.setAttribute('height', '5');
+      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/location.svg');
+      this.testNode.setAttribute('id', this.id);
 
       var self = this;
 
@@ -105,8 +96,15 @@ angular.module('starter.services', [])
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
       // 1.5 und 3 wegen icon
-      this.testNode.setAttribute('x', x - 3.5);
-      this.testNode.setAttribute('y', y - 5.2);
+      var rotation;
+      var diffX = Math.abs((x-this.we));
+      var diffY = Math.abs((y-this.ns));
+
+      rotation = (Math.atan(diffY/diffX) * (180 / Math.PI)) ;
+
+      this.testNode.setAttribute('x', x - 2);
+      this.testNode.setAttribute('y', y);
+      this.testNode.setAttribute('transform', 'rotate('+rotation+', '+(x+2.5)+', '+(y+2.5)+')');
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
@@ -129,7 +127,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(url).success(function (response) {
+      $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
           if(getCar(element.id) == undefined) {
             var car = new Car(element);
@@ -169,7 +167,7 @@ angular.module('starter.services', [])
       init: function () {
         if(prom === undefined) {
           prom =  $q(function(resolve, reject) {
-            $http.get(url).success(function (response) {
+            $http.get(urlmock).success(function (response) {
               response.forEach(function (element, index, array) {
                 var car = new Car(element);
                 addCar(car);
@@ -204,22 +202,19 @@ angular.module('starter.services', [])
 
     var shit = $q(function(resolve, reject) {
       positions.init().then(function() {
-        $http.get(url_list).success(function (response) {
-          console.log('test');
+        $http.get(urlmock).success(function (response) {
           response.forEach(function(element, index, array){
             var current = positions.getCar(element.deviceid);
             if(current != undefined) {
               if(element.team != undefined){
                 current.team = element.team;
                 positions.addToTeam(current);
-                console.log(positions);
               }
               current.country = element.country;
               current.color = element.color;
               current.clazz = element.class;
               current.name = element.name;
-              console.log(current);
-              switch(current.clazz){
+              /*switch(current.clazz){
                 case 'SP7':
                   current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
                   break;
@@ -229,7 +224,7 @@ angular.module('starter.services', [])
                 default:
                   current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
                   break;
-              }
+              }*/
             }
           });
           resolve();
