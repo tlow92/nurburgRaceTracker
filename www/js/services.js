@@ -2,6 +2,11 @@ angular.module('starter.services', [])
 
   .factory('positions', function ($http,$interval, $q) {
     var cars = [];
+    /**
+     * car.id -> position in cars[]
+     * @type {Array}
+     */
+    var mapping = [];
 
     //Ursprung:  x = 29 y = 289
     //Oben rechts: x = 293 y = 15
@@ -30,8 +35,9 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var urlmock = 'img/IPHNGR24_positions.json';
+    var urlmock = 'img/IPHNGR24_position_current.json';
     var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
+    var prom;
     // Initialisierung
 
     function Car(args) {
@@ -40,9 +46,9 @@ angular.module('starter.services', [])
       this.team = args.team;
       this.country = args.country;
       this.nr = args.nr;
-      this.deviceid = args.deviceid;
+      //this.deviceid = args.deviceid;
       this.color = args.color;
-      this.clazz = args.clazz;
+      this.clazz = args.class;
       this.we = args.WE;
       this.ns = args.NS;
       this.dir = args.dir;
@@ -109,11 +115,11 @@ angular.module('starter.services', [])
       lastUpdate = Date.now();
       $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
-          if(cars[element.id] == undefined) {
+          if(getCar(element.id) == undefined) {
             var car = new Car(element);
-            cars[element.id] = car;
+            addCar(car);
           } else {
-            var car = cars[element.id];
+            var car = getCar(element.id);
           }
           car.update(element, lastUpdate);
         });
@@ -127,17 +133,27 @@ angular.module('starter.services', [])
         },1500)
       }
     };
+    var addCar = function(car){
+      var position = cars.push(car);
+      mapping[car.id] = position;
+    };
+    var getCar = function(id) {
+      return cars[mapping[id]];
+    };
     return {
       init: function () {
-        return $q(function(resolve, reject) {
-          $http.get(urlmock).success(function (response) {
-            response.forEach(function (element, index, array) {
-              var car = new Car(element);
-              cars[element.id] = car;
-            });
-            resolve();
-          }).error(reject);
-        });
+        if(prom === undefined) {
+          prom =  $q(function(resolve, reject) {
+            $http.get(urlmock).success(function (response) {
+              response.forEach(function (element, index, array) {
+                var car = new Car(element);
+                addCar(car);
+              });
+              resolve();
+            }).error(reject);
+          });
+        }
+        return prom;
       },
       startLoop: start,
       cancelLoop: function() {
@@ -146,36 +162,50 @@ angular.module('starter.services', [])
         }
       },
       carArray : cars,
+      getCar : getCar,
+      addCar : addCar,
       setSVG : function() {
         svg = document.getElementById('svgObject');
       }
     }
   })
 
-  .factory('teams', function ($http, positions) {
+  .factory('teams', function ($http, positions, $q) {
     var teams = [];
     var url = 'http://live.racing.apioverip.de/IPHNGR24_list.json';
     var urlmock = 'img/IPHNGR24_list.json';
 
-    positions.init().then(function() {
-      $http.get(urlmock).success(function (response) {
-        response.forEach(function(element, index, array){
-          if(positions.carArray[element.id] != undefined) {
-            positions.carArray[element.id] = element;
-          }
-        });
+    var shit = $q(function(resolve, reject) {
+      positions.init().then(function() {
+        $http.get(urlmock).success(function (response) {
+          console.log('test');
+          response.forEach(function(element, index, array){
+            var current = positions.getCar(element.deviceid);
+            if(current != undefined) {
+              current.team = element.team;
+              current.country = element.country;
+              current.color = element.color;
+              current.clazz = element.class;
+              current.name = element.name;
+            }
+          });
+          resolve();
+        }).error(reject);
       });
     });
 
+
    return {
-      getClassInformation: function (clazz) {
+      /*getClassInformation: function (clazz) {
+        var result = [];
         positions.carArray.forEach(function(element, index, array){
-          var result = [];
           if(element.clazz == clazz) {
             result.push(element);
           }
-          return result;
-        })
-      }
+        });
+
+        return result;
+      }*/
+     shit : shit
     }
   });
