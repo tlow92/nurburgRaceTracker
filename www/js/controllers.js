@@ -47,12 +47,19 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('mapCoordinates', function ($scope, $http, positions) {
+  .controller('mapCoordinates', function ($scope, $http, positions,teams) {
 
     positions.setSVG();
 
     positions.init();
 
+
+
+
+
     positions.startLoop();
+
+
+
 
   });

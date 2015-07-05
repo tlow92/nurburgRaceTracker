@@ -37,8 +37,9 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var urlmock = 'img/IPHNGR24_position_current.json';
+    var url = 'img/IPHNGR24_position_current.json';
     var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
+
     var prom;
     // Initialisierung
 
@@ -60,6 +61,7 @@ angular.module('starter.services', [])
       this.unix_ts = args.unix_ts;
       this.matrix_id = args.matrix_id;
 
+
       if(svg != undefined) {
         this.initMarker();
       }
@@ -68,20 +70,19 @@ angular.module('starter.services', [])
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       this.testNode.setAttribute('width', '8');
       this.testNode.setAttribute('height', '8');
+
       switch(this.clazz){
-        case '':
-          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+        case 'SP7':
+          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
           break;
         case 'CUP5':
-          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+          this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
           break;
         default:
           this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
           break;
       }
 
-      }
-      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
       var self = this;
 
       svg.addEventListener('load', function () {
@@ -128,7 +129,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(urlmock).success(function (response) {
+      $http.get(url).success(function (response) {
         response.forEach(function (element, index, array) {
           if(getCar(element.id) == undefined) {
             var car = new Car(element);
@@ -168,7 +169,7 @@ angular.module('starter.services', [])
       init: function () {
         if(prom === undefined) {
           prom =  $q(function(resolve, reject) {
-            $http.get(urlmock).success(function (response) {
+            $http.get(url).success(function (response) {
               response.forEach(function (element, index, array) {
                 var car = new Car(element);
                 addCar(car);
@@ -203,7 +204,7 @@ angular.module('starter.services', [])
 
     var shit = $q(function(resolve, reject) {
       positions.init().then(function() {
-        $http.get(urlmock).success(function (response) {
+        $http.get(url_list).success(function (response) {
           console.log('test');
           response.forEach(function(element, index, array){
             var current = positions.getCar(element.deviceid);
@@ -217,6 +218,18 @@ angular.module('starter.services', [])
               current.color = element.color;
               current.clazz = element.class;
               current.name = element.name;
+              console.log(current);
+              switch(current.clazz){
+                case 'SP7':
+                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
+                  break;
+                case 'CUP5':
+                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
+                  break;
+                default:
+                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+                  break;
+              }
             }
           });
           resolve();
