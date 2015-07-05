@@ -1,6 +1,18 @@
 angular.module('starter.services', [])
 
-  .factory('positions', function ($http,$interval) {
+  .factory('positions', function ($http,$interval,$q) {
+      var quadtree;
+      function closestPoint(pathNode, point) {
+        var promise = $q(function(resolve,reject){
+          if(quadtree!=undefined){
+            var foundPoint = quadtree.find(point);
+            resolve(foundPoint);
+          }else{
+            reject();
+          }
+        });
+        return promise;
+      };
     var cars = [];
 
     //Ursprung:  x = 29 y = 289
@@ -32,13 +44,9 @@ angular.module('starter.services', [])
 
     var url = 'img/IPHNGR24_positions.json';
     var strecke = '';
-    var worker = new Worker("js/closestPoint.js");
+    var precision,pathLength;
 
-    worker.postMessage({
-      type:"test",
-      svg:JSON.stringify(svg),
-      type:svg.constructor.name
-    });
+
     // Initialisierung
 
     function Car(args) {
@@ -70,7 +78,19 @@ angular.module('starter.services', [])
         var y = svgStarty + ((starty - this.ns) * facY);
         if(strecke == '') {
           strecke = d3.select(svg.contentDocument).select("#Kath_3_").node();
-          console.log(strecke.constructor);
+          pathLength = strecke.getTotalLength();
+          precision = 1;//25.378km
+          currentLength = 0;
+          var data = [];
+          while(currentLength<pathLength){
+            var currPoint = strecke.getPointAtLength(currentLength);
+            data.push([currPoint.x,currPoint.y]);
+            currentLength += precision
+          }
+
+          quadtree = d3.geom.quadtree()
+              .extent([[-1, -1], [400 + 1, 400 + 1]])
+          (data);
         }
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
@@ -86,10 +106,13 @@ angular.module('starter.services', [])
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
       // 1.5 und 3 wegen icon
-      //var approxPos = closestPoint(strecke, [x, y]);
-      //this.testNode.setAttribute('x', approxPos[0] - 3);
-      //this.testNode.setAttribute('y', approxPos[1] - 4);
+      var self = this;
+      closestPoint(strecke, [x, y]).then(function(approxPos){
+        self.testNode.setAttribute('x', approxPos[0] - 3);
+        self.testNode.setAttribute('y', approxPos[1] - 4);
+      });
 
+      //
       //this.testNode.setAttribute('x', x - 1.5);
       //this.testNode.setAttribute('y', y - 3);
     };
@@ -119,15 +142,15 @@ angular.module('starter.services', [])
           var car = cars[element.id];
           car.update(element, lastUpdate);
         });
+        //console.log(cars);
         render();
       });
     };
     var start = function() {
       if(loop == null){
         loop = $interval(function(){
-          worker.postMessage({asd:"asd"});
           update();
-        },3000)
+        },5000)
       }
     };
     return {
