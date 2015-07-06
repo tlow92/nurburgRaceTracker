@@ -7,6 +7,20 @@ angular.module('starter.services', [])
      * car.id -> position in cars[]
      * @type {Array}
      */
+      var quadtree;
+      function closestPoint(pathNode, point) {
+        var promise = $q(function(resolve,reject){
+          if(quadtree!=undefined){
+            var foundPoint = quadtree.find(point);
+            resolve(foundPoint);
+          }else{
+            reject();
+          }
+        });
+        return promise;
+      }
+
+
     var carMapping = [];
     var teamMapping = [];
 
@@ -39,6 +53,8 @@ angular.module('starter.services', [])
 
     var urlmock = 'img/IPHNGR24_position_current.json';
     var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
+    var strecke = '';
+    var precision,pathLength;
 
     var prom;
     // Initialisierung
@@ -79,9 +95,25 @@ angular.module('starter.services', [])
       svg.addEventListener('load', function () {
         var x = svgStartx + ((this.we - startx) * facX);
         var y = svgStarty + ((starty - this.ns) * facY);
+        if(strecke == '') {
+          strecke = d3.select(svg.contentDocument).select("#Kath_3_").node();
+          pathLength = strecke.getTotalLength();
+          precision = 1;//25.378km
+          currentLength = 0;
+          var data = [];
+          while (currentLength < pathLength) {
+            var currPoint = strecke.getPointAtLength(currentLength);
+            data.push([currPoint.x, currPoint.y]);
+            currentLength += precision
+          }
+
+          quadtree = d3.geom.quadtree()
+            .extent([[-1, -1], [400 + 1, 400 + 1]])
+          (data);
+        }
         self.setMarker();
         svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
-      });
+      })
     };
     Car.prototype.update = function (element, lastUpdate) {
       if(this.testNode == undefined) {
@@ -97,6 +129,11 @@ angular.module('starter.services', [])
       var oldY = this.testNode.getAttribute('y');
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
+      var self = this;
+      closestPoint(strecke, [x, y]).then(function(approxPos){
+        self.testNode.setAttribute('x', approxPos[0] - 3);
+        self.testNode.setAttribute('y', approxPos[1] - 4);
+      });
 
       if(x == oldX && y == oldY) {
         console.log("no update");
