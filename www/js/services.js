@@ -68,11 +68,13 @@ angular.module('starter.services', [])
     }
     Car.prototype.initMarker = function () {
 
-      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      this.testNode.setAttribute('width', '6');
-      this.testNode.setAttribute('height', '6');
-      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/location.svg');
-      this.testNode.setAttribute('id', this.id);
+      this.testGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      this.testPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
+      this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
+      this.testPath.setAttribute('fill', '#FFF');
+      this.testPath.setAttribute('id', this.id);
+      this.testGroup.appendChild(this.testPath);
 
       var self = this;
 
@@ -80,11 +82,11 @@ angular.module('starter.services', [])
         var x = svgStartx + ((this.we - startx) * facX);
         var y = svgStarty + ((starty - this.ns) * facY);
         self.setMarker();
-        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
+        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testGroup);
       });
     };
     Car.prototype.update = function (element, lastUpdate) {
-      if(this.testNode == undefined) {
+      if(this.testGroup == undefined) {
         this.initMarker();
       }
       this.we = element.WE;
@@ -93,49 +95,63 @@ angular.module('starter.services', [])
       this.ownTs = lastUpdate;
     };
     Car.prototype.setMarker = function () {
-      var oldX = this.testNode.getAttribute('x');
-      var oldY = this.testNode.getAttribute('y');
+
+
+      var oldX = this.oldX;
+      var oldY = this.oldY;
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
+      this.oldX = x;
+      this.oldY = y;
 
       if(x == oldX && y == oldY) {
         console.log("no update");
       } else if (oldX == null || oldY == null) {
-        this.testNode.setAttribute('x', x);
-        this.testNode.setAttribute('y', y);
-        this.testNode.setAttribute('transform', 'rotate(-45, ' + (x + 3) + ', ' + (y + 3) + ')');
+        this.testGroup.setAttribute('transform', 'translate('+x+', '+y+'),rotate(45,3,3)');
       } else {
         // 1.5 und 3 wegen icon
         var rotation;
-        var diffX = oldX - x;
+        var diffX = x - oldX;
         var diffY = oldY - y;
+
+        //console.log(diffX);
+        //console.log(diffY);
 
         if(diffX == 0){
           if(diffY > 0) {
-            rotation = 135;
-          } else {
             rotation = -45;
+          } else {
+            rotation = 135;
           }
         } else if(diffY == 0) {
           if(diffX > 0) {
-            rotation = -135;
+            rotation = 45;
           } else {
-            rotation = 45
+            rotation = -135;
           }
         } else {
-          rotation = (Math.atan(Math.abs(diffY) / Math.abs(diffX)) * (180 / Math.PI)) - 45;
+
+          if(diffX < 0 && diffY > 0) {
+            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45 + 180;
+          } else if(diffX > 0 && diffY < 0) {
+            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45;
+          } else if(diffX > 0 && diffY > 0) {
+            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI));
+            console.log('wub');
+          } else if(diffX < 0 && diffY < 0) {
+            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45;
+            console.log('wubi');
+          }
+
         }
-        console.log(rotation);
-        this.testNode.setAttribute('x', x);
-        this.testNode.setAttribute('y', y);
-        this.testNode.setAttribute('transform', 'rotate(' + rotation + ', ' + (x + 3) + ', ' + (y + 3) + ')');
+        this.testGroup.setAttribute('transform', 'translate('+x+', '+y+'),rotate('+rotation+',3,3)');
       }
 
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
-      if(this.testNode != null && this.testNode.parentNode != null){
-        this.testNode.parentNode.removeChild(this.testNode);
+      if(this.testGroup != null && this.testGroup.parentNode != null){
+        this.testGroup.parentNode.removeChild(this.testGroup);
       }
     };
     var render = function () {
