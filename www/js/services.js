@@ -69,8 +69,8 @@ angular.module('starter.services', [])
     Car.prototype.initMarker = function () {
 
       this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      this.testNode.setAttribute('width', '5');
-      this.testNode.setAttribute('height', '5');
+      this.testNode.setAttribute('width', '6');
+      this.testNode.setAttribute('height', '6');
       this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/location.svg');
       this.testNode.setAttribute('id', this.id);
 
@@ -93,18 +93,44 @@ angular.module('starter.services', [])
       this.ownTs = lastUpdate;
     };
     Car.prototype.setMarker = function () {
+      var oldX = this.testNode.getAttribute('x');
+      var oldY = this.testNode.getAttribute('y');
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
-      // 1.5 und 3 wegen icon
-      var rotation;
-      var diffX = Math.abs((x-this.we));
-      var diffY = Math.abs((y-this.ns));
 
-      rotation = (Math.atan(diffY/diffX) * (180 / Math.PI)) ;
+      if(x == oldX && y == oldY) {
+        console.log("no update");
+      } else if (oldX == null || oldY == null) {
+        this.testNode.setAttribute('x', x);
+        this.testNode.setAttribute('y', y);
+        this.testNode.setAttribute('transform', 'rotate(-45, ' + (x + 3) + ', ' + (y + 3) + ')');
+      } else {
+        // 1.5 und 3 wegen icon
+        var rotation;
+        var diffX = oldX - x;
+        var diffY = oldY - y;
 
-      this.testNode.setAttribute('x', x - 2);
-      this.testNode.setAttribute('y', y);
-      this.testNode.setAttribute('transform', 'rotate('+rotation+', '+(x+2.5)+', '+(y+2.5)+')');
+        if(diffX == 0){
+          if(diffY > 0) {
+            rotation = 135;
+          } else {
+            rotation = -45;
+          }
+        } else if(diffY == 0) {
+          if(diffX > 0) {
+            rotation = -135;
+          } else {
+            rotation = 45
+          }
+        } else {
+          rotation = (Math.atan(Math.abs(diffY) / Math.abs(diffX)) * (180 / Math.PI)) - 45;
+        }
+        console.log(rotation);
+        this.testNode.setAttribute('x', x);
+        this.testNode.setAttribute('y', y);
+        this.testNode.setAttribute('transform', 'rotate(' + rotation + ', ' + (x + 3) + ', ' + (y + 3) + ')');
+      }
+
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
