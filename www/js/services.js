@@ -83,8 +83,28 @@ angular.module('starter.services', [])
       }
     }
     Car.prototype.initMarker = function () {
+      this.tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      this.tooltip.setAttribute('class', this.id);
+      this.tooltip.setAttribute('width', 36);
+      this.tooltip.setAttribute('height', 5);
+      this.tooltip.setAttribute('rx','2');
+      this.tooltip.setAttribute('ry','2');
+      this.tooltip.setAttribute('opacity','0.4');
+      this.tooltip.setAttribute('display', 'none');
+      this.text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      this.text.setAttribute('class', this.id);
+      this.text.setAttribute('width', 30);
+      this.text.setAttribute('height', 10);
+      this.text.setAttribute('font-size', 2);
+      this.text.setAttribute('fill', '#FFF');
+      this.text.setAttribute('font-family', 'Tahoma');
+      this.text.setAttribute('letter-spacing', '0.4');
+      this.text.textContent = this.id;
+      this.text.setAttribute('display', 'none');
 
       this.testGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      this.testGroup.setAttribute('onclick', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'block\');ele[1].setAttribute(\'display\', \'block\');');
+      this.testGroup.setAttribute('onmouseleave', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'none\');ele[1].setAttribute(\'display\', \'none\');');
       this.testPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
       this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
@@ -114,7 +134,10 @@ angular.module('starter.services', [])
           (data);
         }
         self.setMarker();
-        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testGroup);
+        //svg.contentDocument.getElementById('carsOnMap').appendChild(self.testGroup);
+        document.getElementById('svgMarker').appendChild(self.testGroup);
+        document.getElementById('svgMarker').appendChild(self.tooltip);
+        document.getElementById('svgMarker').appendChild(self.text);
       })
     };
     Car.prototype.update = function (element, lastUpdate) {
@@ -131,11 +154,17 @@ angular.module('starter.services', [])
       var oldY = this.oldY;
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
+      // 1.5 und 3 wegen icon
+      this.tooltip.setAttribute('x', x - 17);
+      this.tooltip.setAttribute('y', y + 3);
+      this.text.setAttribute('x', x - 14);
+      this.text.setAttribute('y', y + 6);
+
       this.oldX = x;
       this.oldY = y;
       var self = this;
       closestPoint(strecke, [x, y]).then(function(approxPos){
-        self.testGroup.setAttribute('transform', 'translate('+(approxPos[0]-3)+', '+(approxPos[1]-3)+')');
+        self.testGroup.setAttribute('transform', 'translate('+(approxPos[0]-3)+', '+(approxPos[1]-3.5)+')');
       });
 
       if(x == oldX && y == oldY) {
