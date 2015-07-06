@@ -240,7 +240,7 @@ angular.module('starter.services', [])
               current.color = element.color;
               current.clazz = element.class;
               current.name = element.name;
-              /*switch(current.clazz){
+              switch(current.clazz){
                 case 'SP7':
                   current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
                   break;
@@ -250,7 +250,7 @@ angular.module('starter.services', [])
                 default:
                   current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
                   break;
-              }*/
+              }
             }
           });
           resolve();
