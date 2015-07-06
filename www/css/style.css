@@ -1,21 +1,43 @@
 html{
-
+font-size: 22px;
 }
 
 body{
 
 
 }
-
-.wrapper {
-    height: 100%;
+.classwrapper{
     width: 100%;
-    min-height: 250px;
+    height: 100%;
+    margin:2% 10% 2% ;
 }
 
-p {
+.textwrapper{
+    width: 100%;
+    height: 100%;
+}
+p.carclass{
+    font-size: 1rem;
 
+}
 
+p#info {
+    position:relative;
+    color: dimgrey;
+    font-size: 0.5rem;
+    max-width: 1000%;
+    text-align: justify;
+    margin: 0 2%;
+}
 
+.carflag{
+    width: 11px;
+    height: 11px;
+}
+
+p#heart{
+    text-align: center;
+    color:dimgrey;
+    margin: 0 5%;
 }
 

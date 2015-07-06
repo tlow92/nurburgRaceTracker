@@ -2,6 +2,27 @@ angular.module('starter.services', [])
 
   .factory('positions', function ($http,$interval, $q) {
     var cars = [];
+    var teams = [];
+    /**
+     * car.id -> position in cars[]
+     * @type {Array}
+     */
+      var quadtree;
+      function closestPoint(pathNode, point) {
+        var promise = $q(function(resolve,reject){
+          if(quadtree!=undefined){
+            var foundPoint = quadtree.find(point);
+            resolve(foundPoint);
+          }else{
+            reject();
+          }
+        });
+        return promise;
+      }
+
+
+    var carMapping = [];
+    var teamMapping = [];
 
     //Ursprung:  x = 29 y = 289
     //Oben rechts: x = 293 y = 15
@@ -30,8 +51,12 @@ angular.module('starter.services', [])
 
     var svg = document.getElementById('svgObject');
 
-    var urlmock = 'img/IPHNGR24_positions.json';
+    var urlmock = 'img/IPHNGR24_position_current.json';
     var url = 'http://live.racing.apioverip.de/IPHNGR24_positions.json';
+    var strecke = '';
+    var precision,pathLength;
+
+    var prom;
     // Initialisierung
 
     function Car(args) {
@@ -40,9 +65,9 @@ angular.module('starter.services', [])
       this.team = args.team;
       this.country = args.country;
       this.nr = args.nr;
-      this.deviceid = args.deviceid;
+      //this.deviceid = args.deviceid;
       this.color = args.color;
-      this.clazz = args.clazz;
+      this.clazz = args.class;
       this.we = args.WE;
       this.ns = args.NS;
       this.dir = args.dir;
@@ -52,47 +77,48 @@ angular.module('starter.services', [])
       this.unix_ts = args.unix_ts;
       this.matrix_id = args.matrix_id;
 
+
       if(svg != undefined) {
         this.initMarker();
       }
     }
     Car.prototype.initMarker = function () {
-      this.tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      this.tooltip.setAttribute('class', this.id);
-      this.tooltip.setAttribute('width', 36);
-      this.tooltip.setAttribute('height', 5);
-      this.tooltip.setAttribute('rx','2');
-      this.tooltip.setAttribute('ry','2');
-      this.tooltip.setAttribute('opacity','0.4');
-      this.tooltip.setAttribute('display', 'none');
-      this.text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      this.text.setAttribute('class', this.id);
-      this.text.setAttribute('width', 30);
-      this.text.setAttribute('height', 10);
-      this.text.setAttribute('font-size', 2);
-      this.text.setAttribute('fill', '#FFF');
-      this.text.setAttribute('font-family', 'Tahoma');
-      this.text.setAttribute('letter-spacing', '0.4');
-      this.text.textContent = this.id;
-      this.text.setAttribute('display', 'none');
-      this.testNode = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      this.testNode.setAttribute('width', '8');
-      this.testNode.setAttribute('height', '8');
-      this.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
-      this.testNode.setAttribute('id', this.id);
-      this.testNode.setAttribute('onclick', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'block\');ele[1].setAttribute(\'display\', \'block\');this.setAttributeNS(\'http://www.w3.org/1999/xlink\', \'href\', \'../img/pointer_blau.png\')');
-      this.testNode.setAttribute('onmouseleave', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'none\');ele[1].setAttribute(\'display\', \'none\');this.setAttributeNS(\'http://www.w3.org/1999/xlink\', \'href\', \'../img/pointer.png\')');
+
+      this.testGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      this.testPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
+      this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
+      this.testPath.setAttribute('fill', '#FFF');
+      this.testPath.setAttribute('id', this.id);
+      this.testGroup.appendChild(this.testPath);
+
       var self = this;
 
       svg.addEventListener('load', function () {
+        var x = svgStartx + ((this.we - startx) * facX);
+        var y = svgStarty + ((starty - this.ns) * facY);
+        if(strecke == '') {
+          strecke = d3.select(svg.contentDocument).select("#Kath_3_").node();
+          pathLength = strecke.getTotalLength();
+          precision = 1;//25.378km
+          currentLength = 0;
+          var data = [];
+          while (currentLength < pathLength) {
+            var currPoint = strecke.getPointAtLength(currentLength);
+            data.push([currPoint.x, currPoint.y]);
+            currentLength += precision
+          }
+
+          quadtree = d3.geom.quadtree()
+            .extent([[-1, -1], [400 + 1, 400 + 1]])
+          (data);
+        }
         self.setMarker();
-        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testNode);
-        svg.contentDocument.getElementById('tooltipsOnMap').appendChild(self.tooltip);
-        svg.contentDocument.getElementById('tooltipsOnMap').appendChild(self.text);
-      });
+        svg.contentDocument.getElementById('carsOnMap').appendChild(self.testGroup);
+      })
     };
     Car.prototype.update = function (element, lastUpdate) {
-      if(this.testNode == undefined) {
+      if(this.testGroup == undefined) {
         this.initMarker();
       }
       this.we = element.WE;
@@ -101,20 +127,28 @@ angular.module('starter.services', [])
       this.ownTs = lastUpdate;
     };
     Car.prototype.setMarker = function () {
+      var oldX = this.oldX;
+      var oldY = this.oldY;
       var x = svgStartx + ((this.we - startx) * facX);
       var y = svgStarty + ((starty - this.ns) * facY);
-      // 1.5 und 3 wegen icon
-      this.testNode.setAttribute('x', x - 3.5);
-      this.testNode.setAttribute('y', y - 5.2);
-      this.tooltip.setAttribute('x', x - 17);
-      this.tooltip.setAttribute('y', y + 3);
-      this.text.setAttribute('x', x - 14);
-      this.text.setAttribute('y', y + 6);
+      this.oldX = x;
+      this.oldY = y;
+      var self = this;
+      closestPoint(strecke, [x, y]).then(function(approxPos){
+        self.testGroup.setAttribute('transform', 'translate('+(approxPos[0]-3)+', '+(approxPos[1]-3)+')');
+      });
+
+      if(x == oldX && y == oldY) {
+        console.log("no update");
+      } else {
+        this.testGroup.setAttribute('transform', 'translate('+x+', '+y+')');
+      }
+
     };
     Car.prototype.removeMarker = function() {
       console.log("remove Marker");
-      if(this.testNode != null && this.testNode.parentNode != null){
-        this.testNode.parentNode.removeChild(this.testNode);
+      if(this.testGroup != null && this.testGroup.parentNode != null){
+        this.testGroup.parentNode.removeChild(this.testGroup);
       }
     };
     var render = function () {
@@ -134,11 +168,11 @@ angular.module('starter.services', [])
       lastUpdate = Date.now();
       $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
-          if(cars[element.id] == undefined) {
+          if(getCar(element.id) == undefined) {
             var car = new Car(element);
-            cars[element.id] = car;
+            addCar(car);
           } else {
-            var car = cars[element.id];
+            var car = getCar(element.id);
           }
           car.update(element, lastUpdate);
         });
@@ -149,20 +183,39 @@ angular.module('starter.services', [])
       if(loop == null){
         loop = $interval(function(){
           update();
-        },1500)
+        },3000)
       }
+    };
+    var addCar = function(car){
+      var position = cars.push(car);
+      if(car.team != undefined)addToTeam(car);
+      carMapping[car.id] = position-1;
+    };
+    var addToTeam = function(car){
+      if(teamMapping[car.team] === undefined){
+        var team = [];
+        var pos = teams.push({push:team.push,name:car.team,forEach:team.forEach});
+        teamMapping[car.team] = pos;
+      }
+      teams[teamMapping[car.team]-1].push(car);
+    };
+    var getCar = function(id) {
+      return cars[carMapping[id]];
     };
     return {
       init: function () {
-        return $q(function(resolve, reject) {
-          $http.get(urlmock).success(function (response) {
-            response.forEach(function (element, index, array) {
-              var car = new Car(element);
-              cars[element.id] = car;
-            });
-            resolve();
-          }).error(reject);
-        });
+        if(prom === undefined) {
+          prom =  $q(function(resolve, reject) {
+            $http.get(urlmock).success(function (response) {
+              response.forEach(function (element, index, array) {
+                var car = new Car(element);
+                addCar(car);
+              });
+              resolve();
+            }).error(reject);
+          });
+        }
+        return prom;
       },
       startLoop: start,
       cancelLoop: function() {
@@ -171,44 +224,68 @@ angular.module('starter.services', [])
         }
       },
       carArray : cars,
+      teams: teams,
+      getCar : getCar,
+      addCar : addCar,
+      addToTeam: addToTeam,
       setSVG : function() {
         svg = document.getElementById('svgObject');
       }
     }
   })
 
-  .factory('teams', function ($http, positions) {
+  .factory('teams', function ($http, positions, $q) {
     var teams = [];
     var url = 'http://live.racing.apioverip.de/IPHNGR24_list.json';
     var urlmock = 'img/IPHNGR24_list.json';
 
-    positions.init().then(function() {
-      $http.get(urlmock).success(function (response) {
-        response.forEach(function(element, index, array){
-          if(positions.carArray[element.id] != undefined) {
-            positions.carArray[element.id] = element;
-          }
-        });
+    var shit = $q(function(resolve, reject) {
+      positions.init().then(function() {
+        $http.get(urlmock).success(function (response) {
+          response.forEach(function(element, index, array){
+            var current = positions.getCar(element.deviceid);
+            if(current != undefined) {
+              if(element.team != undefined){
+                current.team = element.team;
+                positions.addToTeam(current);
+              }
+              current.country = element.country;
+              current.color = element.color;
+              current.clazz = element.class;
+              current.name = element.name;
+              var setColor = function(colorHexCode){
+                current.testPath.setAttribute('fill', colorHexCode);
+              };
+              switch(current.clazz){
+                case 'SP7':
+                  setColor('#01DF3A');
+                  break;
+                case 'CUP5':
+                  setColor('#00BFFF');
+                  break;
+                default:
+                  setColor('#FFF');
+                  break;
+              }
+            }
+          });
+          resolve();
+        }).error(reject);
       });
     });
 
+
    return {
-      getClassInformation: function (clazz, color) {
+      /*getClassInformation: function (clazz) {
+        var result = [];
         positions.carArray.forEach(function(element, index, array){
-          var result = [];
           if(element.clazz == clazz) {
-            result.push({
-              element : element,
-              color : color
-            });
+            result.push(element);
           }
-          console.log(result);
+        });
 
-          return result;
-        })
-      },
-
+        return result;
+      }*/
+     shit : shit
     }
-
-
-  })
+  });
