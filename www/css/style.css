@@ -35,4 +35,9 @@ p#info {
     height: 11px;
 }
 
+p#heart{
+    text-align: center;
+    color:dimgrey;
+    margin: 0 5%;
+}
 
