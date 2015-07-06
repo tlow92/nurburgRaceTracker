@@ -253,17 +253,20 @@ angular.module('starter.services', [])
               current.color = element.color;
               current.clazz = element.class;
               current.name = element.name;
-              /*switch(current.clazz){
+              var setColor = function(colorHexCode){
+                current.testPath.setAttribute('fill', colorHexCode);
+              };
+              switch(current.clazz){
                 case 'SP7':
-                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
+                  setColor('#01DF3A');
                   break;
                 case 'CUP5':
-                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointerblau.png');
+                  setColor('#00BFFF');
                   break;
                 default:
-                  current.testNode.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../img/pointer.png');
+                  setColor('#FFF');
                   break;
-              }*/
+              }
             }
           });
           resolve();
