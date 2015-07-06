@@ -31,7 +31,7 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
+            <state vertical-scroll-proportion="0.0">
               <caret line="4" column="93" selection-start-line="4" selection-start-column="93" selection-end-line="4" selection-end-column="105" />
               <folding />
             </state>
@@ -61,8 +61,8 @@
       <file leaf-file-name="services.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/js/services.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.0">
-              <caret line="132" column="10" selection-start-line="132" selection-start-column="10" selection-end-line="132" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.61190736">
+              <caret line="175" column="24" selection-start-line="175" selection-start-column="24" selection-end-line="175" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -181,9 +181,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-4" />
     <option name="y" value="23" />
-    <option name="width" value="1680" />
+    <option name="width" value="1676" />
     <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -493,10 +492,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="23" width="1680" height="1027" extended-state="0" />
+    <frame x="0" y="23" width="1676" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3390558" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -511,11 +509,12 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="123" width="1720" height="853" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -794,7 +793,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14191107">
           <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -901,7 +899,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.9450935">
           <caret line="0" column="18329" selection-start-line="0" selection-start-column="18325" selection-end-line="0" selection-end-column="18329" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -936,8 +933,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/js/services.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0">
-          <caret line="132" column="10" selection-start-line="132" selection-start-column="10" selection-end-line="132" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.61190736">
+          <caret line="175" column="24" selection-start-line="175" selection-start-column="24" selection-end-line="175" selection-end-column="24" />
           <folding />
         </state>
       </provider>

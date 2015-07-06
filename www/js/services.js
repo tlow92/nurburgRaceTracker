@@ -136,7 +136,7 @@ angular.module('starter.services', [])
           } else if(diffX > 0 && diffY < 0) {
             rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45;
           } else if(diffX > 0 && diffY > 0) {
-            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI));
+            rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45;
             console.log('wub');
           } else if(diffX < 0 && diffY < 0) {
             rotation = (Math.atan(Math.abs(diffY / diffX)) * (180 / Math.PI)) + 45;
