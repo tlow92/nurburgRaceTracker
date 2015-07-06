@@ -207,7 +207,7 @@ angular.module('starter.services', [])
       if(loop == null){
         loop = $interval(function(){
           update();
-        },1500)
+        },3000)
       }
     };
     var addCar = function(car){
