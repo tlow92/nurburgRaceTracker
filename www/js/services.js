@@ -166,7 +166,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(urlmock).success(function (response) {
+      $http.get(url).success(function (response) {
         response.forEach(function (element, index, array) {
           if(getCar(element.id) == undefined) {
             var car = new Car(element);
@@ -206,7 +206,7 @@ angular.module('starter.services', [])
       init: function () {
         if(prom === undefined) {
           prom =  $q(function(resolve, reject) {
-            $http.get(urlmock).success(function (response) {
+            $http.get(url).success(function (response) {
               response.forEach(function (element, index, array) {
                 var car = new Car(element);
                 addCar(car);
@@ -241,7 +241,7 @@ angular.module('starter.services', [])
 
     var shit = $q(function(resolve, reject) {
       positions.init().then(function() {
-        $http.get(urlmock).success(function (response) {
+        $http.get(url).success(function (response) {
           response.forEach(function(element, index, array){
             var current = positions.getCar(element.deviceid);
             if(current != undefined) {
