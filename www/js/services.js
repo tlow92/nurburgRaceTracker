@@ -20,13 +20,13 @@ angular.module('starter.services', [])
         return promise;
       };
 
-    showTooltip = function(car) {
+    function showTooltip(car) {
       var ele = document.getElementsByClassName(car);
       ele[0].setAttribute('display', 'block');
       ele[1].setAttribute('display', 'block');
       document.getElementById(car).setAttribute('stroke', '#000');
     };
-    hideAllTooltips = function() {
+    function hideAllTooltips() {
       cars.forEach(function(element, index, array){
         var ele = document.getElementsByClassName(element.id);
         ele[0].setAttribute('display', 'none');
@@ -209,7 +209,7 @@ angular.module('starter.services', [])
     var lastUpdate;
     var update = function () {
       lastUpdate = Date.now();
-      $http.get(url).success(function (response) {
+      $http.get(urlmock).success(function (response) {
         response.forEach(function (element, index, array) {
           if(getCar(element.id) == undefined) {
             var car = new Car(element);
@@ -249,7 +249,7 @@ angular.module('starter.services', [])
       init: function () {
         if(prom === undefined) {
           prom =  $q(function(resolve, reject) {
-            $http.get(url).success(function (response) {
+            $http.get(urlmock).success(function (response) {
               response.forEach(function (element, index, array) {
                 var car = new Car(element);
                 addCar(car);
@@ -284,7 +284,7 @@ angular.module('starter.services', [])
 
     var shit = $q(function(resolve, reject) {
       positions.init().then(function() {
-        $http.get(url).success(function (response) {
+        $http.get(urlmock).success(function (response) {
           response.forEach(function(element, index, array){
             var current = positions.getCar(element.deviceid);
             if(current != undefined) {
