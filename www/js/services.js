@@ -18,7 +18,22 @@ angular.module('starter.services', [])
           }
         });
         return promise;
-      }
+      };
+
+    showTooltip = function(car) {
+      var ele = document.getElementsByClassName(car);
+      ele[0].setAttribute('display', 'block');
+      ele[1].setAttribute('display', 'block');
+      document.getElementById(car).setAttribute('stroke', '#000');
+    };
+    hideAllTooltips = function() {
+      cars.forEach(function(element, index, array){
+        var ele = document.getElementsByClassName(element.id);
+        ele[0].setAttribute('display', 'none');
+        ele[1].setAttribute('display', 'none');
+        document.getElementById(element.id).removeAttribute('stroke');
+      });
+    };
 
 
     var carMapping = [];
@@ -107,8 +122,8 @@ angular.module('starter.services', [])
       this.text.setAttribute('display', 'none');
 
       this.testGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      this.testGroup.setAttribute('onclick', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'block\');ele[1].setAttribute(\'display\', \'block\');document.getElementById(\''+this.id+'\').setAttribute(\'stroke\', \'#000\');');
-      this.testGroup.setAttribute('onmouseleave', 'var ele = document.getElementsByClassName(\''+this.id+'\');ele[0].setAttribute(\'display\', \'none\');ele[1].setAttribute(\'display\', \'none\');document.getElementById(\''+this.id+'\').removeAttribute(\'stroke\');');
+      this.testGroup.setAttribute('onclick', 'hideAllTooltips();showTooltip('+this.id+')');
+      //this.testGroup.setAttribute('onmouseleave', 'hideAllTooltips()');
       this.testPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
       this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
@@ -167,7 +182,7 @@ angular.module('starter.services', [])
       });
 
       if(x == oldX && y == oldY) {
-        console.log("no update");
+        //console.log("no update");
       } else {
         this.testGroup.setAttribute('transform', 'translate('+x+', '+y+')');
       }
