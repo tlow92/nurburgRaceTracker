@@ -9160,7 +9160,10 @@ CllZMLrXgmWNbQZL6lEAqxVZM+qxImuAsjTWIWAU0cIOu5arrNiOPd9xXF6rg+mCMPEKDXXtsJQV
 </g>
 
 
-<g id="carsOnMap">
-
+<g id="tempoLimit">
+	<image xlink:href="../img/limit250.png" height="8" width="8" x="228" y="150"></image>
+	<image xlink:href="../img/limit200.png" height="8" width="8" x="155" y="195"></image>
+	<image xlink:href="../img/limit200.png" height="8" width="8" x="38" y="183"></image>
+	<image xlink:href="../img/limit200.png" height="8" width="8" x="32" y="135"></image>
 </g>
 </svg>
