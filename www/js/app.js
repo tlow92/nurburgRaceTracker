@@ -63,7 +63,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     views: {
       'tab-info': {
         templateUrl: 'templates/tab-info.html'
-        //controller: 'InfoCtrl'
+      }
+    }
+  })
+  .state('tab.cars', {
+    url: '/cars',
+    views: {
+      'tab-info': {
+        templateUrl: 'templates/tab-cars.html'
+      }
+    }
+  })
+  .state('tab.supporter', {
+    url: '/supporter',
+    views: {
+      'tab-info': {
+        templateUrl: 'templates/tab-supporter.html'
       }
     }
   });
