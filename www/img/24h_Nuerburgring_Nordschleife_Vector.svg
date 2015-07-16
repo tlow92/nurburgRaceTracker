@@ -8348,7 +8348,7 @@ iwkb6zT3AAAAAElFTkSuQmCC" transform="matrix(1 0 0 1 17.3604 19.8384)">
 		<text transform="matrix(1.0001 0 0 1 102.2744 261.9038)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'FranklinGothic-Medium'" font-size="3.9566">Nürburgring</tspan><tspan x="1.21" y="2.849" fill="#FFFFFF" font-family="'FranklinGothic-Medium'" font-size="2.374">Grand-Prix-Strecke</tspan></text>
 	</g>
 	<g>
-		<text transform="matrix(1 0 0 1 105.1982 134.8975)"><tspan x="0" y="0" fill="#C2C2C2" font-family="'ArialMT'" font-size="5.3291">Streckenlänge: 25,378 km</tspan><tspan x="0" y="6.395" fill="#C2C2C2" font-family="'ArialMT'" font-size="5.3291">Kurven: 170</tspan></text>
+		<text transform="matrix(1 0 0 1 105.1982 134.8975)"><tspan x="0" y="0" fill="#C2C2C2" font-family="'ArialMT'" font-size="5.3291">Streckenlänge: 25,378 km</tspan><tspan x="0" y="6.395" fill="#C2C2C2" font-family="'ArialMT'" font-size="5.3291">Kurven: 73</tspan></text>
 	</g>
 	<g>
 		
@@ -9162,8 +9162,8 @@ CllZMLrXgmWNbQZL6lEAqxVZM+qxImuAsjTWIWAU0cIOu5arrNiOPd9xXF6rg+mCMPEKDXXtsJQV
 
 <g id="tempoLimit">
 	<image xlink:href="../img/limit250.png" height="8" width="8" x="228" y="150"></image>
-	<image xlink:href="../img/limit200.png" height="8" width="8" x="155" y="195"></image>
+	<image xlink:href="../img/nolimit.png" height="8" width="8" x="155" y="195"></image>
 	<image xlink:href="../img/limit200.png" height="8" width="8" x="38" y="183"></image>
-	<image xlink:href="../img/limit200.png" height="8" width="8" x="32" y="135"></image>
+	<image xlink:href="../img/nolimit.png" height="8" width="8" x="32" y="135"></image>
 </g>
 </svg>

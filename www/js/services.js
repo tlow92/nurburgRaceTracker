@@ -120,8 +120,10 @@ angular.module('starter.services', [])
       */
       //this.testGroup.setAttribute('onmouseleave', 'hideAllTooltips()');
       this.testPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
-      this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
+      //this.testPath.setAttribute('d', 'M10.368,19.102c0.349,1.049,1.011,1.086,1.478,0.086l5.309-11.375c0.467-1.002,0.034-1.434-0.967-0.967L4.812,12.154   c-1.001,0.467-0.963,1.129,0.085,1.479L9,15L10.368,19.102z');
+      //this.testPath.setAttribute('transform', 'scale(0.25,0.25)');
+      this.testPath.setAttribute('d', 'M256,0C167.641,0,96,71.625,96,160c0,24.75,5.625,48.219,15.672,69.125C112.234,230.313,256,512,256,512l142.594-279.375 C409.719,210.844,416,186.156,416,160C416,71.625,344.375,0,256,0z M256,256c-53.016,0-96-43-96-96s42.984-96,96-96   c53,0,96,43,96,96S309,256,256,256z');
+      this.testPath.setAttribute('transform', 'scale(0.0075,0.0075)');
       this.testPath.setAttribute('fill', '#FFF');
       this.testPath.setAttribute('id', this.id);
       this.testGroup.appendChild(this.testPath);
@@ -296,11 +298,107 @@ angular.module('starter.services', [])
                 current.testPath.setAttribute('fill', colorHexCode);
               };
               switch(current.clazz){
-                case 'SP7':
-                  setColor('#01DF3A');
+                case 'CUP1':
+                  setColor('#00ccff');
+                  break;
+                case 'CUP2':
+                  setColor('#0044ff');
+                  break;
+                case 'CUP4':
+                  setColor('#0080ff');
                   break;
                 case 'CUP5':
-                  setColor('#00BFFF');
+                  setColor('#0066cc');
+                  break;
+                case 'H1':
+                  setColor('#00ff00');
+                  break;
+                case 'H2':
+                  setColor('#00b300');
+                  break;
+                case 'H3':
+                  setColor('#00ff80');
+                  break;
+                case 'H4':
+                  setColor('#c0ff00');
+                  break;
+                case 'V1':
+                  setColor('#cc0000');
+                  break;
+                case 'VT1':
+                  setColor('#b30000');
+                  break;
+                case 'V2':
+                  setColor('#e60000');
+                  break;
+                case 'VT2':
+                  setColor('#ff1a1a');
+                  break;
+                case 'V3':
+                  setColor('#ff1a53');
+                  break;
+                case 'VT3':
+                  setColor('#ff3466');
+                  break;
+                case 'V4':
+                  setColor('#ff2d1a');
+                  break;
+                case 'V5':
+                  setColor('#ff4434');
+                  break;
+                case 'V6':
+                  setColor('#ff7734');
+                  break;
+                case 'SP1':
+                  setColor('#7c204e');
+                  break;
+                case 'SP2':
+                  setColor('#7c2037');
+                  break;
+                case 'SP2T':
+                  setColor('#7c3720');
+                  break;
+                case 'SP3T':
+                  setColor('#a5492a');
+                  break;
+                case 'SP4':
+                  setColor('#eb6ceb');
+                  break;
+                case 'SP4T':
+                  setColor('#e53fe5');
+                  break;
+                case 'SP5':
+                  setColor('#b9b900');
+                  break;
+                case 'SP6':
+                  setColor('#01DF3A');
+                  break;
+                case 'SP7':
+                  setColor('#d2d200');
+                  break;
+                case 'SP8':
+                  setColor('#cdcd00');
+                  break;
+                case 'SP8T':
+                  setColor('#e6e600');
+                  break;
+                case 'SP9':
+                  setColor('#eaff00');
+                  break;
+                case 'SPPRO':
+                  setColor('#ffff00');
+                  break;
+                case 'SPX':
+                  setColor('#525252');
+                  break;
+                case 'E1-XP1':
+                  setColor('#8d8d8d');
+                  break;
+                case 'E1-XP2':
+                  setColor('#b3b3b3');
+                  break;
+                case 'E1-XP':
+                  setColor('#d9d9d9');
                   break;
                 default:
                   setColor('#FFF');

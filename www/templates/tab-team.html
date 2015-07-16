@@ -1,12 +1,14 @@
 <ion-view view-title="Teams">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="team in teams">
-        {{team.name}}
+      <ion-item ng-repeat="team in teams" style="font-size: 0.8rem;">
+        {{::team.name}} {{::team.country}}
         <ul>
           <li ng-repeat="car in team">
-            {{car.clazz}}:
-            <span style="color:{{car.color}};text-shadow: -1px 0 black, 0 0.5px black, 1px 0 black, 0 -1px black;"> {{car.name}}</span><br />
+            <p>{{::car.clazz}}
+<!--            <span style="color:{{car.color}};text-shadow: -1px 0 black, 0 0.5px black, 1px 0 black, 0 -1px black;"> {{::car.name}}</span><br />-->
+            <span style="color:{{car.color}};text-shadow: 0 -1px #000000, 1px 0 #000000, 0 1px #000000, -1px 0 #000000;font-size: 0.8rem;"> {{car.nr}}{{car.name}}</span><br />
+            </p>
           </li>
         </ul>
       </ion-item>
